@@ -2,59 +2,93 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 import mysql.connector 
-from PIL import ImageTk, Image
+# from PIL import ImageTk, Image
 from datetime import datetime, timedelta
 
+# python connection with mysql.connector
 db = mysql.connector.connect(
-    host = "localhost", 
-    user = "root",             
-    password = "##umardb71@@", 
-    database = "LibraryManagement"
+    host="localhost",
+    user="root",
+    password="##umardb71@@",
+    database="LibraryManagement"
 )
 cursor = db.cursor()
 
-#login window
-login_window = tk.Tk()
-login_window.title("Login")
-login_window.geometry("1550x800")
-login_window.config(bg="lightpink")
-
-try:
-    image = Image.open("icons8-library-64.png")
-    photo = ImageTk.PhotoImage(image)
-    login_window.iconphoto(True, photo)
-
-except Exception as e:
-    print(f"Error loading image: {e}")
-
-header_label = tk.Label(login_window, text="Library Management System", font=("times new roman", 45 , "bold"), bg="purple", fg="white", bd=3)
+# first window
+first_window = tk.Tk()
+first_window.title("Login Catogories")
+first_window.geometry("1550x800")
+first_window.config(bg="lightpink")
+header_label = tk.Label(first_window, text="Library Management System", font=("times new roman", 45 , "bold"), bg="purple", fg="white", bd=3)
 header_label.pack(fill=tk.X, pady=7)
-header_label = tk.Label(login_window, text="Login", font=("times new roman", 45 , "bold"), bg="lightpink", fg="black", bd=3)
+header_label = tk.Label(first_window, text="Login Catogories", font=("times new roman", 45 , "bold"), bg="lightpink", fg="black", bd=3)
 header_label.pack(fill=tk.X, pady=7)
-button_frame = tk.Frame(login_window, bd=4, bg="lightpink")
+button_frame = tk.Frame(first_window, bd=4, bg="lightpink")
 button_frame.place(relx=0.5, rely=0.5, anchor="center")
-
-button_frame.grid_rowconfigure(0, weight=1)
-button_frame.grid_rowconfigure(1, weight=1)
-button_frame.grid_rowconfigure(2, weight=1)
-button_frame.grid_columnconfigure(0, weight=1)
-button_frame.grid_columnconfigure(1, weight=1)
+btn_login = tk.Button(button_frame, text="Login as an Admin", font=("times new roman", 20, "bold"), bg="purple", fg="white", command=lambda: login1())
+btn_login.grid(row=2, column=1, pady=35, padx=35)
+btn_login = tk.Button(button_frame, text="Login as a Member", font=("times new roman", 20, "bold"), bg="purple", fg="white", command=lambda: login2())
+btn_login.grid(row=3, column=1, pady=35, padx=35)
 
 
-lbl_username = tk.Label(button_frame, text="Username:", font=("times new roman", 23, "bold"),bg="lightpink", fg="black")
-lbl_username.grid(row=1, column=1, padx= 10, pady=10, sticky=tk.W)
-entry_username = tk.Entry(button_frame)
-entry_username.grid(row=1, column=2, padx= 10, pady=10, sticky=tk.W, columnspan=2)
+ #login window
+def login1():
+    login_window = tk.Tk()
+    login_window.title("Login Window")
+    login_window.geometry("1550x800")
+    login_window.config(bg="lightpink")
+
+    # try:
+    #     image = Image.open("C:/Users/os/Documents/Database Systems/Testing/icons8-library-64.png")
+    #     photo = ImageTk.PhotoImage(image)
+    #     login_window.iconphoto(True, photo)
+
+    # except Exception as e:
+    #     print(f"Error loading image: {e}")
+
+    header_label = tk.Label(login_window, text="Library Management System", font=("times new roman", 45 , "bold"), bg="purple", fg="white", bd=3)
+    header_label.pack(fill=tk.X, pady=7)
+    header_label = tk.Label(login_window, text="Admin Login", font=("times new roman", 45 , "bold"), bg="lightpink", fg="black", bd=3)
+    header_label.pack(fill=tk.X, pady=7)
+    button_frame = tk.Frame(login_window, bd=4, bg="lightpink")
+    button_frame.place(relx=0.5, rely=0.5, anchor="center")
+
+    button_frame.grid_rowconfigure(0, weight=1)
+    button_frame.grid_rowconfigure(1, weight=1)
+    button_frame.grid_rowconfigure(2, weight=1)
+    button_frame.grid_columnconfigure(0, weight=1)
+    button_frame.grid_columnconfigure(1, weight=1)
 
 
-lbl_password = tk.Label(button_frame, text="Password:", font=("times new roman", 23, "bold"), bg="lightpink", fg="black")
-lbl_password.grid(row=2, column=1, padx= 10, pady=10, sticky=tk.W)
-entry_password = tk.Entry(button_frame, show="*") 
-entry_password.grid(row=2, column=2, padx= 10, pady=10, sticky=tk.W, columnspan=2)
+    lbl_username = tk.Label(button_frame, text="Username:", font=("times new roman", 23, "bold"),bg="lightpink", fg="black")
+    lbl_username.grid(row=1, column=1, padx= 10, pady=10, sticky=tk.W)
+    entry_username = tk.Entry(button_frame)
+    entry_username.grid(row=1, column=2, padx= 10, pady=10, sticky=tk.E, columnspan=2)
 
+    lbl_password = tk.Label(button_frame, text="Password:", font=("times new roman", 23, "bold"), bg="lightpink", fg="black")
+    lbl_password.grid(row=2, column=1, padx= 10, pady=10, sticky=tk.W)
+    entry_password = tk.Entry(button_frame, show="*") 
+    entry_password.grid(row=2, column=2, padx= 10, pady=10, sticky=tk.E, columnspan=2)
 
-def create_main_window():
-    # Create the main window
+    def validate_login():
+        username = entry_username.get()
+        password = entry_password.get()
+
+        if username == "a" and password == "a":
+            messagebox.showinfo("Login Success", "Login Successful! Welcome to the Library Management System.")
+            login_window.destroy()  
+            create_main_window1() 
+        else:
+            messagebox.showerror("Login Error", "Invalid username or password. Please try again.")
+
+    # Login Button
+    btn_login = tk.Button(button_frame, text="Login", font=("times new roman", 20, "bold"), bg="purple", fg="white", command=validate_login)
+    btn_login.grid(row=6, column=1,columnspan=3, pady=35, padx=35)
+    
+    
+# Create the main window1
+def create_main_window1():
+    
     main_window = tk.Tk()
     main_window.title("Library Management System")
     main_window.geometry("1550x800")
@@ -64,79 +98,222 @@ def create_main_window():
     # Heading label
     header_label = tk.Label(main_window, text="Library Management System", font=("times new roman", 35, "bold"), fg="white", bg="darkblue")
     header_label.pack(fill=tk.X, pady=20)
+    header_label = tk.Label(main_window, text="Admin Dashboard", font=("times new roman", 25 , "bold"), bg="lightpink", fg="black", bd=3)
+    header_label.pack(fill=tk.X, pady=7)
     
     button_frame = tk.Frame(main_window, bd=4, bg="lightpink")
-    button_frame.place(x=100, y=100, width=1150, height=600)
+    # button_frame.place(x=100, y=100, width=1150, height=600)
+    button_frame.place(relx=0.5, rely=0.5, anchor="center")
+
+    
+    btn_type_1 = tk.Button(button_frame, text="Books", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3 , command=lambda: Book_admin())
+    btn_type_1 .grid(row=0, column=5, padx= 30, pady=30)
+    
+    btn_type_2 = tk.Button(button_frame, text="Members", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3 , command=lambda: Member_admin())
+    btn_type_2 .grid(row=1, column=5, padx= 30, pady=30)
+    
+    btn_type_3 = tk.Button(button_frame, text="Transactions", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3 , command=lambda: Transaction_admin())
+    btn_type_3 .grid(row=2, column=5, padx= 30, pady=30)
+
+
+
+    main_window.mainloop()
+
+
+# Book Window for admin
+def Book_admin():
+    book_window = tk.Tk()
+    book_window.title("Books Dashboard")
+    book_window.geometry("1550x800")
+    book_window.config(bg="lightpink")
     
 
-    # Button to Add Member
-    btn_add_member = tk.Button(button_frame, text="Add Member", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3 , command=lambda: insert_member())
-    btn_add_member.grid(row=0, column=0, padx= 30, pady=30)
+    header_label = tk.Label(book_window, text="Books Dashboard", font=("times new roman", 35, "bold"), fg="white", bg="darkblue")
+    header_label.pack(fill=tk.X, pady=20)
+    button_frame = tk.Frame(book_window, bd=4, bg="lightpink")
+    button_frame.place(relx=0.5, rely=0.5, anchor="center")
 
-    # Button to Add Book
+    
     btn_add_book = tk.Button(button_frame, text="Add Book", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3 ,  command=lambda: insert_book())
-    btn_add_book.grid(row=0, column=1, padx= 30, pady=30)
-
-    # Button to Update Member
-    btn_update_member = tk.Button(button_frame, text="Update Member", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3, command=lambda: update_member())
-    btn_update_member.grid(row=0, column=2, padx= 30, pady=30)
-
-    # Button to Update Book
+    btn_add_book.grid(row=0, column=4, padx= 30, pady=30)
+    
     btn_update_book = tk.Button(button_frame, text="Update Book", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3,  command=lambda: update_book())
-    btn_update_book.grid(row=0, column=3, padx= 30, pady=30)
-
-    # Button to Delete Member
-    btn_delete_member = tk.Button(button_frame, text="Delete Member", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3 ,  command=lambda: delete_member())
-    btn_delete_member.grid(row=1, column=0, padx= 30, pady=30)
-
-    # Button to Delete Book
+    btn_update_book.grid(row=0, column=5, padx= 30, pady=30)
+    
     btn_delete_book = tk.Button(button_frame, text="Delete Book", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3 , command=lambda: delete_book())
-    btn_delete_book.grid(row=1, column=1, padx= 30, pady=30)
+    btn_delete_book.grid(row=1, column=4, padx= 30, pady=30)
+    
+    btn_view_books = tk.Button(button_frame, text="View Books", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3 , command=lambda: load_books())
+    btn_view_books.grid(row=1, column=5, padx= 30, pady=30)
+    
+    btn_view_books = tk.Button(button_frame, text="Back", font=("times new roman", 17, "bold"), bg="darkblue", fg="white", width=15, height=3 , command=lambda: create_main_window1())
+    btn_view_books.grid(row=2, column=4, columnspan=2, padx= 30, pady=30)
 
+
+# Member Window for admin
+def Member_admin():
+    member_window = tk.Tk()
+    member_window.title("Books Dashboard")
+    member_window.geometry("1550x800")
+    member_window.config(bg="lightpink")
+    
+    header_label = tk.Label(member_window, text="Member dashboard", font=("times new roman", 35, "bold"), fg="white", bg="darkblue")
+    header_label.pack(fill=tk.X, pady=20)
+    button_frame = tk.Frame(member_window, bd=4, bg="lightpink")
+    button_frame.place(relx=0.5, rely=0.5, anchor="center")
+    
+    btn_add_member = tk.Button(button_frame, text="Add Member", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3 , command=lambda: insert_member())
+    btn_add_member.grid(row=0, column=4, padx= 30, pady=30)
+    
+    btn_update_member = tk.Button(button_frame, text="Update Member", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3, command=lambda: update_member())
+    btn_update_member.grid(row=0, column=5, padx= 30, pady=30)
+    
+    btn_delete_member = tk.Button(button_frame, text="Delete Member", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3 ,  command=lambda: delete_member())
+    btn_delete_member.grid(row=1, column=4, padx= 30, pady=30)
+    
+    btn_view_member = tk.Button(button_frame, text="View Member", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3, command=lambda: load_members())
+    btn_view_member.grid(row=1, column=5, padx= 30, pady=30)
+    
+    btn_view_member = tk.Button(button_frame, text="Back", font=("times new roman", 17, "bold"), bg="darkblue", fg="white", width=15, height=3, command=lambda: create_main_window1())
+    btn_view_member.grid(row=2, column=4, columnspan=2, padx= 30, pady=30)
+    
+
+# Transaction Window for admin 
+def Transaction_admin():
+    transaction_window = tk.Tk()
+    transaction_window.title("Books Dashboard")
+    transaction_window.geometry("1550x800")
+    transaction_window.config(bg="lightpink")
+    
+    header_label = tk.Label(transaction_window, text="Member dashboard", font=("times new roman", 35, "bold"), fg="white", bg="darkblue")
+    header_label.pack(fill=tk.X, pady=20)
+    button_frame = tk.Frame(transaction_window, bd=4, bg="lightpink")
+    button_frame.place(relx=0.5, rely=0.5, anchor="center") 
+    
+    
     # Button to Borrow Book
     btn_borrow = tk.Button(button_frame, text="Borrow Book",font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3, command=lambda: borrow_book())
-    btn_borrow.grid(row=1, column=2, padx= 30, pady=30)
+    btn_borrow.grid(row=0, column=4, padx= 30, pady=30)
 
     # Button to Return Book
     btn_return = tk.Button(button_frame, text="Return Book", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3, command=lambda: return_book())
-    btn_return.grid(row=1, column=3, padx= 30, pady=30)
-
-    # Button to View Member
-    btn_view_member = tk.Button(button_frame, text="View Member", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3, command=lambda: load_members())
-    btn_view_member.grid(row=2, column=0, padx= 30, pady=30)
-    
-# Button to search Member
-    btn_search_member = tk.Button(button_frame, text="Search Member", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3, command= search_member)
-    btn_search_member.grid(row=2, column=1, padx= 30, pady=30)
-
-    # Button to Search Books
-    btn_search_books = tk.Button(button_frame, text="Search Books", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3 , command=lambda: search_book())
-    btn_search_books.grid(row=2, column=2, padx= 30, pady=30)
-    
-    # Button to view Books
-    btn_view_books = tk.Button(button_frame, text="View Books", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3 , command=lambda: load_books())
-    btn_view_books.grid(row=2, column=3, padx= 30, pady=30)
+    btn_return.grid(row=0, column=5, padx= 30, pady=30)
     
     # Button to view Transactions 
     btn_transaction = tk.Button(button_frame, text="View Transaction", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3 , command=lambda: view_transactions())
-    btn_transaction.grid(row=3, column=1, padx= 30, pady=17, columnspan=2)
+    btn_transaction.grid(row=1, column=4, padx= 30, pady=17)
 
-def validate_login():
+    btn_transaction = tk.Button(button_frame, text="Back", font=("times new roman", 17, "bold"), bg="darkblue", fg="white", width=15, height=3 , command=lambda: create_main_window1())
+    btn_transaction.grid(row=1, column=5, padx= 30, pady=17)
+    
+    
+
+
+# login window 2
+def login2():
+    login_window = tk.Tk()
+    login_window.title("Login Window")
+    login_window.geometry("1550x800")
+    login_window.config(bg="lightpink")
+
+    # try:
+    #     image = Image.open("C:/Users/os/Documents/Database Systems/Testing/icons8-library-64.png")
+    #     photo = ImageTk.PhotoImage(image)
+    #     login_window.iconphoto(True, photo)
+
+    # except Exception as e:
+    #     print(f"Error loading image: {e}")
+
+    header_label = tk.Label(login_window, text="Library Management System", font=("times new roman", 45 , "bold"), bg="purple", fg="white", bd=3)
+    header_label.pack(fill=tk.X, pady=7)
+    header_label = tk.Label(login_window, text="Member Login", font=("times new roman", 45 , "bold"), bg="lightpink", fg="black", bd=3)
+    header_label.pack(fill=tk.X, pady=7)
+    button_frame = tk.Frame(login_window, bd=4, bg="lightpink")
+    button_frame.place(relx=0.5, rely=0.5, anchor="center")
+
+    button_frame.grid_rowconfigure(0, weight=1)
+    button_frame.grid_rowconfigure(1, weight=1)
+    button_frame.grid_rowconfigure(2, weight=1)
+    button_frame.grid_columnconfigure(0, weight=1)
+    button_frame.grid_columnconfigure(1, weight=1)
+
+
+    lbl_username = tk.Label(button_frame, text="Username:", font=("times new roman", 23, "bold"),bg="lightpink", fg="black")
+    lbl_username.grid(row=1, column=1, padx= 10, pady=10, sticky=tk.W)
+    entry_username = tk.Entry(button_frame)
+    entry_username.grid(row=1, column=2, padx= 10, pady=10, sticky=tk.E, columnspan=2)
+
+    lbl_password = tk.Label(button_frame, text="Password:", font=("times new roman", 23, "bold"), bg="lightpink", fg="black")
+    lbl_password.grid(row=2, column=1, padx= 10, pady=10, sticky=tk.W)
+    entry_password = tk.Entry(button_frame, show="*") 
+    entry_password.grid(row=2, column=2, padx= 10, pady=10, sticky=tk.E, columnspan=2)
+
+    def validate_login():
         username = entry_username.get()
         password = entry_password.get()
 
-        if username == "admin" and password == "password123":
+        if username == "m" and password == "m":
             messagebox.showinfo("Login Success", "Login Successful! Welcome to the Library Management System.")
             login_window.destroy()  
-            create_main_window() 
+            create_main_window2() 
         else:
             messagebox.showerror("Login Error", "Invalid username or password. Please try again.")
 
     # Login Button
-btn_login = tk.Button(button_frame, text="Login", font=("times new roman", 20, "bold"), bg="purple", fg="white", command=validate_login)
-btn_login.grid(row=6, column=1, pady=35, padx=35, columnspan=2)
+    btn_login = tk.Button(button_frame, text="Login", font=("times new roman", 20, "bold"), bg="purple", fg="white", command=validate_login)
+    btn_login.grid(row=6, column=1,columnspan=3, pady=35, padx=35)
 
-#Functions for every button in the main window 
+
+
+
+# main window 2 
+
+def create_main_window2():
+    # Create the main window
+    main_window = tk.Tk()
+    main_window.title("Library Management System")
+    main_window.geometry("1550x800")
+    main_window.config(bg="lightpink")
+    
+
+
+    # Heading label
+    header_label = tk.Label(main_window, text="Library Management System", font=("times new roman", 35, "bold"), fg="white", bg="darkblue")
+    header_label.pack(fill=tk.X, pady=20)
+    header_label = tk.Label(main_window, text="Member Dashboard", font=("times new roman", 25 , "bold"), bg="lightpink", fg="black", bd=3)
+    header_label.pack(fill=tk.X, pady=7)
+    
+    button_frame = tk.Frame(main_window, bd=4, bg="lightpink")
+    button_frame.place(relx=0.5, rely=0.5, anchor="center")
+
+    
+
+
+
+    # Button to Borrow Book
+    btn_borrow = tk.Button(button_frame, text="Borrow Book",font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3, command=lambda: borrow_book())
+    btn_borrow.grid(row=0, column=4, padx= 30, pady=30)
+
+    # Button to Return Book
+    btn_return = tk.Button(button_frame, text="Return Book", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3, command=lambda: return_book())
+    btn_return.grid(row=0, column=5, padx= 30, pady=30)
+
+    # Button to Search Books
+    btn_search_books = tk.Button(button_frame, text="Search Books", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3 , command=lambda: search_book())
+    btn_search_books.grid(row=1, column=4, padx= 30, pady=30)
+    
+    # Button to view Books
+    btn_view_books = tk.Button(button_frame, text="View Books", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3 , command=lambda: load_books())
+    btn_view_books.grid(row=1, column=5, padx= 30, pady=30)
+
+    # Button to Add Member
+    btn_add_member = tk.Button(button_frame, text="Add Member", font=("times new roman", 17, "bold"), bg="purple", fg="white", width=15, height=3 , command=lambda: insert_member())
+    btn_add_member.grid(row=2, column=4, columnspan=2, padx= 30, pady=30)
+    
+   
+    
+    
+ #Functions for every button in the main window 
 def load_books():
     # Create a new window
     ViewBooksWindow = tk.Toplevel()
@@ -154,6 +331,7 @@ def load_books():
     background="lightblue", 
     foreground="black",     
     font=("Arial", 12, "bold")
+      
 )
 
     bookframe = tk.Frame(ViewBooksWindow, bd=4, relief=tk.RIDGE, bg="lightblue")
@@ -174,7 +352,11 @@ def load_books():
         booktable.insert("", tk.END, values=row)
 
 
+
+
+
 # View members table new code 
+
 def load_members():
     # Create a new window
     ViewMembersWindow = tk.Toplevel()
@@ -187,6 +369,7 @@ def load_members():
     TitleLabel.pack(fill=tk.X)
 
 
+     
     style = ttk.Style()
     style.theme_use("default")
 
@@ -213,7 +396,6 @@ def load_members():
     for row in cursor.fetchall():
         membertable.insert("", tk.END, values=row)
 
-
 # insert member into member table  new code 
 def insert_member():
     def SaveMember():
@@ -221,16 +403,16 @@ def insert_member():
         if not all([MemberName.get(), MemberEmail.get(), MemberPhone.get()]):
             messagebox.showerror("Error", "Please fill all member details.")
             return
-
+       
         if not MemberPhone.get().isdigit() or len(MemberPhone.get()) != 11:
             messagebox.showerror("Error", "Phone Number must be an integer with exactly 11 digits.")
             return
 
-        if "@" not in MemberEmail.get():
-            messagebox.showerror("Error", "Email must contain '@'.")
+        if "@gmail.com" not in MemberEmail.get():
+            messagebox.showerror("Error", "Invalid Email")
             return
         try:
-
+          
             cursor.execute(
                 "INSERT INTO Members (Name, Email, PhoneNumber, MembershipDate) VALUES (%s, %s, %s, NOW())",
                 (MemberName.get(), MemberEmail.get(), MemberPhone.get())
@@ -241,23 +423,20 @@ def insert_member():
         except Exception as e:
             messagebox.showerror("Error", str(e))
 
-
+   
     InsertMemberWindow = tk.Toplevel()
     InsertMemberWindow.title("Insert Member")
     InsertMemberWindow.geometry("600x500")  
     InsertMemberWindow.configure(bg="lightgreen")
 
-
+   
     tk.Label(InsertMemberWindow, text="INSERT MEMBER", font=("Arial", 20, "bold"), bg="darkgreen", fg="white", pady=10).pack(fill= tk.X)
 
-
+   
     TableFrame = tk.Frame(InsertMemberWindow, bg="lightgreen")
     TableFrame.pack(expand=True, fill= tk.BOTH, padx=20, pady=20)
 
-    # Member ID
-   # tk.Label(TableFrame, text="Member ID", font=("Arial", 12), bg="lightgreen").grid(row=0, column=0, padx=10, pady=10, sticky= tk.W)
-   # MemberId = tk.Entry(TableFrame, width=30)
-   # MemberId.grid(row=0, column=1, padx=10, pady=10)
+
 
     # Name
     tk.Label(TableFrame, text="Name", font=("Arial", 12), bg="lightgreen").grid(row=1, column=0, padx=10, pady=10, sticky= tk.W)
@@ -290,9 +469,10 @@ def insert_member():
     # Ensure the content is centered in the form frame
     TableFrame.place(relx=0.5, rely=0.5, anchor="center")
 
-
 # Delete member new code
+
 def delete_member():
+ 
     def DeleteMember():
         if not MemberID.get():
             messagebox.showerror("Error", "Please enter Member ID.")
@@ -305,11 +485,11 @@ def delete_member():
             else:
                 messagebox.showinfo("Success", "Member deleted successfully.")
                 DeleteWindow.destroy()  
-
+              
         except Exception as e:
             messagebox.showerror("Error", str(e))
 
-
+  
     DeleteWindow = tk.Toplevel()
     DeleteWindow.title("Delete Member")
     DeleteWindow.geometry("400x200")
@@ -330,8 +510,8 @@ def delete_member():
     # Delete button
     tk.Button(DeleteWindow, text="Delete Member", command=DeleteMember, bg="red", fg="white", font=("Arial", 12), width=15).pack(pady=20)
 
-
 # Add book into the book table new code
+
 def insert_book():
     def SaveBook():
         # Validate input fields
@@ -344,10 +524,11 @@ def insert_book():
             # BookIdVal = int(BookID.get())
             BookQuantityVal = int(BookQuantity.get())
         except ValueError:
-            messagebox.showerror("Error", "Book ID and Quantity must be integers.")
+            messagebox.showerror("Error","Quantity must be integers.")
             return
         
         try:
+           
             cursor.execute(
                 "INSERT INTO Books (Title, Author, Publisher, Quantity) VALUES (%s, %s, %s, %s)",
                 (BookTitle.get(), BookAuthor.get(), BookPublisher.get(), BookQuantityVal)
@@ -367,14 +548,11 @@ def insert_book():
     # Title label
     tk.Label(SaveMemberWindow, text="INSERT BOOK", font=("Arial", 20, "bold"), bg="darkblue", fg="white", pady=10).pack(fill=tk.X)
 
-
+   
     TableFrame = tk.Frame(SaveMemberWindow, bg="lightblue")
     TableFrame.pack(expand=True, fill= tk.BOTH, padx=20, pady=20)
 
-    # Book ID
-    # tk.Label(TableFrame, text="Book ID", font=("Arial", 12), bg="lightblue").grid(row=0, column=0, padx=10, pady=10, sticky=tk.W)
-    # BookID = tk.Entry(TableFrame, width=30)
-    # BookID.grid(row=0, column=1, padx=10, pady=10)
+
 
     # Title
     tk.Label(TableFrame, text="Title", font=("Arial", 12), bg="lightblue").grid(row=1, column=0, padx=10, pady=10, sticky=tk.W)
@@ -396,8 +574,11 @@ def insert_book():
     BookQuantity = tk.Entry(TableFrame, width=30)
     BookQuantity.grid(row=4, column=1, padx=10, pady=10)
 
+  
     InsertButton = tk.Button(TableFrame, text="Add Book", font=("Arial", 14), bg="darkblue", fg="white", command=SaveBook)
     InsertButton.grid(row=5, column=0, columnspan=2, pady=20)  # Place the button below the form fields
+
+  
     TableFrame.grid_rowconfigure(0, weight=1)
     TableFrame.grid_rowconfigure(1, weight=1)
     TableFrame.grid_rowconfigure(2, weight=1)
@@ -408,11 +589,14 @@ def insert_book():
     TableFrame.grid_columnconfigure(0, weight=1)
     TableFrame.grid_columnconfigure(1, weight=2)
 
+   
     TableFrame.place(relx=0.5, rely=0.5, anchor="center")
 
 # delete book from book table 
 def delete_book():
+  
     def DeleteBook():
+       
         book_id = BookID.get()
         if not book_id:
             messagebox.showerror("Error", "Please enter Book ID.")
@@ -423,11 +607,11 @@ def delete_book():
         try:
             cursor.execute("DELETE FROM Books WHERE BookID = %s", (book_id,))
             db.commit()
-            if cursor.rowcount == 0:  # Check if any rows were affected
+            if cursor.rowcount == 0:  
                 messagebox.showerror("Error", "No book found with this ID.")
             else:
                 messagebox.showinfo("Success", "Book deleted successfully.")
-                DeleteWindow.destroy()  # Close the delete book window
+                DeleteWindow.destroy() 
                 
         except Exception as e:
             messagebox.showerror("Error", str(e))
@@ -451,15 +635,15 @@ def delete_book():
     
     # Delete button
     tk.Button(DeleteWindow, text="Delete Book", command=DeleteBook, bg="red", fg="white", font=("Arial", 12), width=15).pack(pady=20)
-# check update code
+
 
 # UPDATE A BOOK
 def update_book():
-    # Create a new window for updating books
+
     update_window = tk.Toplevel()
     update_window.title("Update Book")
-    update_window.geometry("600x500")  # Adjusted size for better fit
-    update_window.configure(bg="lightpink")  # Updated theme
+    update_window.geometry("600x500")  
+    update_window.configure(bg="lightpink") 
 
     # Title label
     tk.Label(update_window, text="UPDATE BOOK", font=("Arial", 20, "bold"), bg="purple", fg="white", pady=10).pack(fill=tk.X)
@@ -516,8 +700,8 @@ def update_book():
 
             # Perform the update
             query = """UPDATE Books 
-                    SET Title = %s, Author = %s, Publisher = %s, Quantity = %s 
-                    WHERE BookID = %s"""
+                       SET Title = %s, Author = %s, Publisher = %s, Quantity = %s 
+                       WHERE BookID = %s"""
             cursor.execute(query, (title, author, publisher, int(quantity), book_id))
             db.commit()
 
@@ -549,7 +733,7 @@ def update_book():
 
 # borrow book code 
 def borrow_book():
-
+   
     borrow_window = tk.Toplevel()
     borrow_window.title("Borrow Book")
     borrow_window.geometry("600x400")  # Adjusted size for better alignment
@@ -626,6 +810,9 @@ def borrow_book():
 
     
     FormFrame.place(relx=0.5, rely=0.5, anchor="center")
+
+
+
 
 
 # return book code
@@ -737,9 +924,6 @@ def update_member():
     update_member_phone = tk.Entry(TableFrame, width=30)
     update_member_phone.grid(row=3, column=1, padx=10, pady=10)
 
-    tk.Label(TableFrame, text="Membership Date", font=("Arial", 12), bg="lightgray").grid(row=4, column=0, padx=10, pady=10, sticky=tk.W)
-    update_membership_date = tk.Entry(TableFrame, width=30)
-    update_membership_date.grid(row=4, column=1, padx=10, pady=10)
 
     # Function to perform the update
     def perform_update():
@@ -747,9 +931,9 @@ def update_member():
         member_name = update_member_name.get().strip()
         member_email = update_member_email.get().strip()
         member_phone = update_member_phone.get().strip()
-        membership_date = update_membership_date.get().strip()
+        # membership_date = update_membership_date.get().strip()
 
-        if not all([member_id, member_name, member_email, member_phone, membership_date]):
+        if not all([member_id, member_name, member_email, member_phone]):
             messagebox.showerror("Error", "Please fill all the fields.")
             return
 
@@ -774,9 +958,9 @@ def update_member():
 
             # Perform the update
             query = """UPDATE Members 
-                    SET Name = %s, Email = %s, PhoneNumber = %s, MembershipDate = %s 
-                    WHERE MemberID = %s"""
-            cursor.execute(query, (member_name, member_email, member_phone, membership_date, member_id))
+                       SET Name = %s, Email = %s, PhoneNumber = %s
+                       WHERE MemberID = %s"""
+            cursor.execute(query, (member_name, member_email, member_phone, member_id))
             db.commit()
 
             messagebox.showinfo("Success", "Member details updated successfully.")
@@ -806,9 +990,10 @@ def update_member():
     update_window.mainloop()
 
 
+
 # Search book code 
 def search_book():
-
+  
     def SearchBook():
         SearchField = search_var.get()
         SearchValue = SearchTextbox.get()
@@ -818,7 +1003,7 @@ def search_book():
             return
 
         try:
-
+          
             if SearchField == "BookID":
                 query = "SELECT * FROM Books WHERE BookID = %s"
                 cursor.execute(query,(SearchValue,))
@@ -831,7 +1016,7 @@ def search_book():
             for row in booktable.get_children():
                 booktable.delete(row)
 
-
+           
             rows = cursor.fetchall()
             if rows:
                 for row in rows:
@@ -853,7 +1038,7 @@ def search_book():
     )
     TitleLabel.pack(fill=tk.X)
 
-
+   
     InputFrame = tk.Frame(SearchWindow, bg="lightgray")
     InputFrame.pack(pady=20, padx=20, fill=tk.X)
 
@@ -865,22 +1050,22 @@ def search_book():
     dropdown.grid(row=0, column=1, padx=10, pady=5)
     search_var.set("BookID")
 
-
+ 
     tk.Label(InputFrame, text="Enter Value:", font=("Arial", 14), bg="lightgray").grid(row=0, column=2, padx=10, pady=5)
     SearchTextbox = tk.Entry(InputFrame, font=("Arial", 14))
     SearchTextbox.grid(row=0, column=3, padx=10, pady=5)
 
-
+  
     SearchButton = tk.Button(
         InputFrame, text="Search", font=("Arial", 14), bg="darkblue", fg="white", command=SearchBook
     )
     SearchButton.grid(row=0, column=4, padx=10, pady=5)
 
-
+   
     TableFrame = tk.Frame(SearchWindow, bg="lightgray")
     TableFrame.pack(pady=20, padx=20, fill=tk.BOTH, expand=True)
 
-
+ 
     style = ttk.Style()
     style.theme_use("default")
 
@@ -907,7 +1092,7 @@ def search_book():
         booktable.heading(col, text=col)
         booktable.column(col, anchor=tk.CENTER, width=150 )
 
-
+  
     scrollbar_y = ttk.Scrollbar(TableFrame, orient=tk.VERTICAL, command=booktable.yview)
     scrollbar_y.pack(side=tk.RIGHT, fill=tk.Y)
     scrollbar_x = ttk.Scrollbar(TableFrame, orient=tk.HORIZONTAL, command=booktable.xview)
@@ -922,12 +1107,13 @@ def search_member():
             return
         
         try:
-
+           
             cursor = db.cursor()
 
+           
             query = """
                 SELECT m.MemberID, m.Name, 
-                t.BookID, t.IssueDate, t.DueDate, t.ReturnDate, t.Fine
+                       t.BookID, t.IssueDate, t.DueDate, t.ReturnDate, t.Fine
                 FROM Members m
                 LEFT JOIN Transactions t ON m.MemberID = t.MemberID
                 WHERE m.MemberID = %s
@@ -966,7 +1152,7 @@ def search_member():
     member_id_entry = tk.Entry(SearchWindow, font=("Arial", 14))
     search_button = tk.Button(SearchWindow, text="Search", font=("Arial", 14), command=fetch_data , bg="darkblue", fg="white")
 
-
+   
     member_id_label.grid(row=1, column=0, padx=10, pady=10, sticky="e")
     member_id_entry.grid(row=1, column=1, padx=10, pady=10, sticky="w")
     search_button.grid(row=1, column=2, padx=10, pady=10)
@@ -980,7 +1166,7 @@ def search_member():
     SearchWindow.grid_rowconfigure(0, weight=0)
     SearchWindow.grid_rowconfigure(1, weight=1)
 
-
+   
     TableFrame = tk.Frame(SearchWindow, bg="lightgray")
     TableFrame.grid(row=2, column=0, columnspan=3, pady=20, padx=20, sticky="nsew")
 
@@ -995,7 +1181,7 @@ def search_member():
     )
     style.configure("Treeview", font=("Arial", 10))
 
-
+   
     booktable = ttk.Treeview(
     TableFrame,
     columns=("MemberID", "Name", "BookID", "IssueDate", "DueDate", "ReturnDate", "Fine"),
@@ -1019,25 +1205,27 @@ def search_member():
     TableFrame.grid_columnconfigure(1, weight=0)
 
 
-
+   
     for col in ("MemberID", "Name", "BookID", "IssueDate", "DueDate", "ReturnDate", "Fine"):
         booktable.heading(col, text=col)
         booktable.column(col, anchor=tk.CENTER, width=120)
 
-
+  
     SearchWindow.grid_rowconfigure(2, weight=1)
     SearchWindow.grid_columnconfigure(0, weight=1)
-
+   
 # function for transaction button 
 def view_transactions():
-
+   
     ViewTransactionsWindow = tk.Toplevel()
     ViewTransactionsWindow.title("Transactions")
     ViewTransactionsWindow.geometry("700x500")  # Adjust the size as needed
 
+   
     TitleLabel = tk.Label(ViewTransactionsWindow, text="Transactions", font=("Arial", 20, "bold"), bg="lightgreen", fg="black", padx=10, pady=5)
     TitleLabel.pack(fill=tk.X)
 
+   
     style = ttk.Style()
     style.theme_use("default")
 
@@ -1069,6 +1257,4 @@ def view_transactions():
         TransactionTable.insert("", tk.END, values=row)
 
 #main
-login_window.mainloop()
-    
-    
+first_window.mainloop() 
